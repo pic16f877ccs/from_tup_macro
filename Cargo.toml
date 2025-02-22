@@ -1,12 +1,12 @@
 [package]
 name = "from_tup_macro"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Karl Wulfert <pic16f877.ccs@emailn.de>"]
-edition = "2021"
+edition = "2024"
 readme = "README.md"
 repository = "https://github.com/pic16f877ccs/from_tup_macro"
 homepage = "https://github.com/pic16f877ccs/from_tup_macro"
-license = "GPL-3.0-or-later"
+license = "MIT OR Apache-2.0"
 description = "Library for implement from tuple trait"
 keywords = ["trait", "no-std", "tuple-convert", "tuple-to-array"]
 categories = ["rust-patterns"]
@@ -14,8 +14,6 @@ categories = ["rust-patterns"]
 [lib]
 name = "from_tup_macro"
 proc-macro = true
-
-[dependencies]
 
 [features]
 from_tup_8 = []

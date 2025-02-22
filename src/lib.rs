@@ -1,30 +1,34 @@
 #![forbid(unsafe_code)]
 extern crate proc_macro;
+#[allow(unused_imports)]
 use proc_macro::TokenStream;
+use core::fmt::Write;
 
+#[allow(dead_code)]
 fn generic_type_param(n: usize) -> String {
-    (1..=n).map(|i| format!("T{}, ", i)).collect::<String>()
+    (1..=n).fold("".to_string(), |mut s, i| { let _ = write!(s, "T{}, ", i); s })
 }
 
+#[allow(dead_code)]
 fn from_tup_fn_ident(n: usize) -> String {
-    (1..=n)
-        .map(|i| format!("t{}.into(), ", i))
-        .collect::<String>()
+    (1..=n).fold("".to_string(), |mut s, i| { let _ = write!(s, "t{}.into(), ", i); s })
 }
 
+#[allow(dead_code)]
 fn from_tup_type_bound(n: usize) -> String {
-    (1..=n)
-        .map(|i| format!("From<T{}> + ", i))
-        .collect::<String>()
+    (1..=n).fold("".to_string(), |mut s, i| { let _ = write!(s, "From<T{}> + ", i); s })
 }
 
+#[allow(dead_code)]
 fn from_tup_value_ident(n: usize) -> String {
-    (1..=n).map(|i| format!("t{}, ", i)).collect::<String>()
+    (1..=n).fold("".to_string(), |mut s, i| { let _ = write!(s, "t{}, ", i); s })
 }
 
+#[allow(dead_code)]
 #[rustfmt::skip]
 fn from_tup_trait_code(n: usize) -> String {
-    (1..=n).map(|i| format!(
+    (1..=n).fold("".to_string(), |mut s, i| {
+        let _ = write!(s,
 "   #[doc = \"Converts tuple ({type_doc}) to array [Self; {i}].\"]
     fn from_{i}<{type_param}>(tup: ( {type_param} ) ) -> [Self; {i}]
         where
@@ -34,12 +38,14 @@ fn from_tup_trait_code(n: usize) -> String {
         type_param = generic_type_param(i),
         type_bound = from_tup_type_bound(i),
         type_doc = generic_type_param(i).trim_end(),
-        i = i,)).collect::<String>()
+        i = i); s })
 }
 
+#[allow(dead_code)]
 #[rustfmt::skip]
 fn from_tup_impl_code(n: usize) -> String {
-    (1..=n).map(|i| format!(
+    (1..=n).fold("".to_string(), |mut s, i| {
+        let _ = write!(s,
 "   #[doc = \"Converts tuple ({type_doc}) to array [Self; {i}].\"]
     #[inline] 
     fn from_{i}<{type_param}>(tup: ( {type_param} ) ) -> [Self; {i}]
@@ -55,9 +61,10 @@ fn from_tup_impl_code(n: usize) -> String {
         type_bound = from_tup_type_bound(i),
         value_ident = from_tup_value_ident(i),
         type_doc = generic_type_param(i).trim_end(),
-        i = i,)).collect::<String>()
+        i = i,); s })
 }
 
+#[allow(unused_macros)]
 macro_rules! from_tup_trait {
     ($to:expr) => {
         #[proc_macro]
